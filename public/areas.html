@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAI - Gestión de Áreas</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-title">
+            <h1>Sistema PAI</h1>
+            <span class="badge">GESTIÓN DE ÁREAS</span>
+        </div>
+        <div class="header-user">
+            <button class="btn btn-secondary" id="btnVolver" style="margin-right: 10px;">
+                Volver
+            </button>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Instrucciones -->
+        <div class="card" style="background-color: #eff6ff; border-left: 4px solid #2563eb;">
+            <h3 style="margin-bottom: 10px; color: #2563eb;">Instrucciones</h3>
+            <p style="margin-bottom: 10px;">
+                Aquí puedes configurar las áreas municipales y sus números de WhatsApp para el envío automático de reclamos PAI.
+            </p>
+            <ul style="margin-left: 20px; color: #64748b;">
+                <li>El número debe incluir código de país + código de área + número (ej: 543424123456)</li>
+                <li>No incluyas signos + o espacios, solo números</li>
+                <li>Asegúrate de que el número sea correcto antes de aprobar reclamos</li>
+            </ul>
+        </div>
+
+        <!-- Formulario Nueva Área -->
+        <div class="card">
+            <h2 class="card-title">Nueva Área</h2>
+            <form id="formNuevaArea" style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 15px; align-items: end;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="nombreArea">Nombre del Área</label>
+                    <input
+                        type="text"
+                        id="nombreArea"
+                        placeholder="ej: ALUMBRADO PÚBLICO"
+                        required
+                        style="text-transform: uppercase;"
+                    >
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="telefonoArea">Número de WhatsApp</label>
+                    <input
+                        type="text"
+                        id="telefonoArea"
+                        placeholder="ej: 543424123456"
+                        required
+                        pattern="[0-9]+"
+                        title="Solo números"
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="padding: 12px;">
+                    + Agregar Área
+                </button>
+            </form>
+        </div>
+
+        <!-- Lista de Áreas -->
+        <div class="card">
+            <h2 class="card-title">Áreas Configuradas</h2>
+            <div class="table-container">
+                <table id="areasTable">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Teléfono WhatsApp</th>
+                            <th>Estado</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="areasBody">
+                        <tr>
+                            <td colspan="5" class="loading">Cargando áreas...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Área -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Editar Área</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+
+            <form id="formEditarArea">
+                <input type="hidden" id="editId">
+
+                <div class="form-group">
+                    <label for="editNombre">Nombre del Área</label>
+                    <input
+                        type="text"
+                        id="editNombre"
+                        required
+                        style="text-transform: uppercase;"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="editTelefono">Número de WhatsApp</label>
+                    <input
+                        type="text"
+                        id="editTelefono"
+                        required
+                        pattern="[0-9]+"
+                        title="Solo números"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="editActivo" style="width: auto;">
+                        <span>Área activa</span>
+                    </label>
+                </div>
+
+                <div class="btn-group" style="justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary">
+                        Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnCancelarEdit">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/areas.js"></script>
+</body>
+</html>

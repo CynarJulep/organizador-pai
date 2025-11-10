@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PAI - Login</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo-section">
+                <h1>🏛️ Sistema PAI</h1>
+                <p>Protocolo de Acción Inmediata</p>
+                <p class="subtitle">Municipalidad de Santa Fe</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        required
+                        autofocus
+                        placeholder="Ingresa tu usuario"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        placeholder="Ingresa tu contraseña"
+                    >
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                <button type="submit" class="btn-primary" id="loginBtn">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="login-info">
+                <p><strong>Usuarios de prueba:</strong></p>
+                <ul>
+                    <li>Operador: <code>operador1</code> / <code>operador123</code></li>
+                    <li>Supervisor: <code>supervisor1</code> / <code>supervisor123</code></li>
+                    <li>Admin: <code>admin</code> / <code>admin123</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar si ya hay una sesión activa
+        fetch('/api/auth/verificar')
+            .then(res => res.json())
+            .then(data => {
+                if (data.autenticado) {
+                    // Ya está autenticado, redirigir según rol
+                    redirigirSegunRol(data.usuario.rol);
+                }
+            })
+            .catch(err => console.error('Error al verificar sesión:', err));
+
+        // Manejar envío del formulario
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Limpiar mensaje de error previo
+            errorMsg.style.display = 'none';
+
+            // Validar campos
+            if (!username || !password) {
+                mostrarError('Por favor completa todos los campos');
+                return;
+            }
+
+            // Deshabilitar botón mientras se procesa
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Iniciando sesión...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.exito) {
+                    // Login exitoso
+                    console.log('Login exitoso:', data.usuario);
+
+                    // Redirigir según el rol
+                    redirigirSegunRol(data.usuario.rol);
+                } else {
+                    // Error en login
+                    mostrarError(data.mensaje || 'Error al iniciar sesión');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Iniciar Sesión';
+                }
+            } catch (error) {
+                console.error('Error en login:', error);
+                mostrarError('Error de conexión. Verifica que el servidor esté funcionando.');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Iniciar Sesión';
+            }
+        });
+
+        function redirigirSegunRol(rol) {
+            if (rol === 'operador') {
+                window.location.href = '/operador.html';
+            } else if (rol === 'supervisor' || rol === 'admin') {
+                window.location.href = '/supervisor.html';
+            } else {
+                mostrarError('Rol de usuario desconocido');
+            }
+        }
+
+        function mostrarError(mensaje) {
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.textContent = mensaje;
+            errorMsg.style.display = 'block';
+        }
+
+        // Permitir submit con Enter
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

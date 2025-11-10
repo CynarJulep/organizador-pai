@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAI - Operador</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-title">
+            <h1>Sistema PAI</h1>
+            <span class="badge">OPERADOR</span>
+        </div>
+        <div class="header-user">
+            <div class="user-info">
+                <div class="user-name" id="userName">Cargando...</div>
+                <div class="user-role">Operador</div>
+            </div>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Estadísticas -->
+        <div class="card">
+            <h2 class="card-title">Estadísticas</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #ea580c; font-weight: bold;" id="statPendientes">0</div>
+                    <div style="color: #64748b;">Pendientes</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #16a34a; font-weight: bold;" id="statAprobados">0</div>
+                    <div style="color: #64748b;">Aprobados</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #dc2626; font-weight: bold;" id="statRechazados">0</div>
+                    <div style="color: #64748b;">Rechazados</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #2563eb; font-weight: bold;" id="statTotal">0</div>
+                    <div style="color: #64748b;">Total</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subir PDF -->
+        <div class="card">
+            <h2 class="card-title">Cargar Nuevo Reclamo</h2>
+            <p style="color: #64748b; margin-bottom: 20px;">
+                Arrastra un PDF de solicitud aquí o haz clic para seleccionar
+            </p>
+            <form action="/api/operador/upload" class="dropzone" id="pdfDropzone"></form>
+        </div>
+
+        <!-- Mis Reclamos -->
+        <div class="card">
+            <h2 class="card-title">Mis Reclamos</h2>
+            <div class="table-container">
+                <table id="reclamosTable">
+                    <thead>
+                        <tr>
+                            <th>Solicitud</th>
+                            <th>Subtipo</th>
+                            <th>Ubicación</th>
+                            <th>Área</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Fecha Carga</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reclamosBody">
+                        <tr>
+                            <td colspan="7" class="loading">Cargando reclamos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
+    <script src="/js/operador.js"></script>
+</body>
+</html>

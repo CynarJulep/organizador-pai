@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAI - Supervisor</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-title">
+            <h1>Sistema PAI</h1>
+            <span class="badge">SUPERVISOR</span>
+        </div>
+        <div class="header-user">
+            <div class="user-info">
+                <div class="user-name" id="userName">Cargando...</div>
+                <div class="user-role">Supervisor</div>
+            </div>
+            <button class="btn btn-secondary" id="btnAreas" style="margin-right: 10px;">
+                Gestionar Áreas
+            </button>
+            <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Estadísticas -->
+        <div class="card">
+            <h2 class="card-title">Estadísticas</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #ea580c; font-weight: bold;" id="statPendientes">0</div>
+                    <div style="color: #64748b;">Pendientes</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #16a34a; font-weight: bold;" id="statAprobados">0</div>
+                    <div style="color: #64748b;">Aprobados</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #dc2626; font-weight: bold;" id="statRechazados">0</div>
+                    <div style="color: #64748b;">Rechazados</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: #2563eb; font-weight: bold;" id="statHoy">0</div>
+                    <div style="color: #64748b;">Hoy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reclamos Pendientes -->
+        <div class="card">
+            <h2 class="card-title">Reclamos Pendientes de Aprobación</h2>
+            <div class="table-container">
+                <table id="reclamosTable">
+                    <thead>
+                        <tr>
+                            <th>Solicitud</th>
+                            <th>Subtipo</th>
+                            <th>Ubicación</th>
+                            <th>Área</th>
+                            <th>Prioridad</th>
+                            <th>Operador</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reclamosBody">
+                        <tr>
+                            <td colspan="8" class="loading">Cargando reclamos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles del reclamo -->
+    <div id="modalReclamo" class="modal">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="modal-header">
+                <h2>Detalle del Reclamo</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+
+            <div id="reclamoDetalle">
+                <!-- El contenido se llenará dinámicamente -->
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px;">PDF de la Solicitud</h3>
+                <iframe id="pdfViewer" style="width: 100%; height: 600px; border: 1px solid #e2e8f0; border-radius: 6px;"></iframe>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label for="observaciones" style="display: block; margin-bottom: 8px; font-weight: 500;">
+                    Observaciones (opcional):
+                </label>
+                <textarea
+                    id="observaciones"
+                    rows="3"
+                    style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-family: inherit;"
+                    placeholder="Agregar comentarios u observaciones..."></textarea>
+            </div>
+
+            <div class="btn-group" style="margin-top: 20px; justify-content: flex-end;">
+                <button class="btn btn-success" id="btnAprobar">
+                    ✓ Aprobar y Enviar por WhatsApp
+                </button>
+                <button class="btn btn-danger" id="btnRechazar">
+                    ✗ Rechazar
+                </button>
+                <button class="btn btn-secondary" id="btnCancelar">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/supervisor.js"></script>
+</body>
+</html>

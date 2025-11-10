@@ -1,0 +1,35 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+
+# Base de datos
+database/*.db
+database/*.db-shm
+database/*.db-wal
+
+# Archivos subidos
+uploads/
+
+# Sesión de WhatsApp
+whatsapp-session/
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
