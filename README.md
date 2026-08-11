@@ -359,3 +359,7 @@ Este proyecto está en desarrollo activo. Para contribuir:
 
 **Última actualización**: Noviembre 2025
 **Versión**: 1.0 (Local) → 2.0 (Online en desarrollo)
+
+---
+
+Maintainer: [CynarJulep](https://github.com/CynarJulep)
