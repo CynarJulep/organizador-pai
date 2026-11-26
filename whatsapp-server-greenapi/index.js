@@ -1,3 +1,28 @@
+const fs = require('fs');
+const path = require('path');
+
+// Carga .env local sin pisar variables ya definidas (Railway, shell, etc.).
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+    for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) continue;
+        const eq = trimmed.indexOf('=');
+        if (eq === -1) continue;
+        const key = trimmed.slice(0, eq).trim();
+        let value = trimmed.slice(eq + 1).trim();
+        if (
+            (value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))
+        ) {
+            value = value.slice(1, -1);
+        }
+        if (process.env[key] === undefined) {
+            process.env[key] = value;
+        }
+    }
+}
+
 const express = require('express');
 const app = express();
 app.use(express.json());
@@ -8,9 +33,21 @@ const GREEN_API_TOKEN = process.env.GREEN_API_TOKEN;
 const GREEN_API_BASE_URL = `https://api.green-api.com/waInstance${GREEN_API_ID}`;
 
 // Validar que las credenciales estén configuradas
-if (!GREEN_API_ID || !GREEN_API_TOKEN) {
+const VALORES_PLACEHOLDER = new Set([
+    'replace-with-your-instance-id',
+    'replace-with-your-api-token',
+    'tu_id_instance',
+    'tu_api_token'
+]);
+
+if (
+    !GREEN_API_ID ||
+    !GREEN_API_TOKEN ||
+    VALORES_PLACEHOLDER.has(GREEN_API_ID) ||
+    VALORES_PLACEHOLDER.has(GREEN_API_TOKEN)
+) {
     console.error('❌ ERROR: GREEN_API_ID y GREEN_API_TOKEN deben estar configurados');
-    console.error('Configúralos como variables de entorno o en .env');
+    console.error('Copiá .env.example a .env y reemplazá los placeholders. No commitees .env.');
     process.exit(1);
 }
 

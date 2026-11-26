@@ -290,7 +290,7 @@ whatsapp-session/
 
 ```bash
 # En la raíz del proyecto
-cd "d:\Renzo\Trabajo\Proyectos\Organizador PAI"
+cd organizador-pai
 git init
 ```
 
@@ -437,7 +437,10 @@ Invoke-WebRequest -Uri $url `
 Editar `whatsapp-server/index.js` y agregar al inicio:
 
 ```javascript
-const API_KEY = process.env.API_KEY || 'cambiar-por-una-clave-segura';
+const API_KEY = process.env.API_KEY;
+if (!API_KEY) {
+    throw new Error('Definí API_KEY en el entorno antes de iniciar el servidor');
+}
 
 // Middleware de autenticación
 function requireApiKey(req, res, next) {
@@ -460,7 +463,7 @@ app.use('/api/send-text', requireApiKey);
 
 Luego en Railway:
 1. Ve a **Variables**
-2. Agrega: `API_KEY` = `tu-clave-super-secreta-aqui`
+2. Agrega: `API_KEY` = una clave propia, generada por vos (no la dejes en el repositorio)
 3. Railway reiniciará automáticamente
 
 ---

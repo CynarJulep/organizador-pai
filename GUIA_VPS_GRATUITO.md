@@ -436,7 +436,10 @@ Editar `index.js` y agregar middleware:
 
 ```javascript
 // Al inicio del archivo
-const API_KEY = process.env.API_KEY || 'cambiar-por-una-clave-segura';
+const API_KEY = process.env.API_KEY;
+if (!API_KEY) {
+    throw new Error('Definí API_KEY en el entorno antes de iniciar el servidor');
+}
 
 // Middleware de autenticación
 function requireApiKey(req, res, next) {
@@ -457,7 +460,7 @@ Configurar variable de entorno:
 
 ```bash
 # En el servidor
-export API_KEY="tu-clave-super-secreta-aqui"
+export API_KEY="replace-with-your-own-secret"
 pm2 restart whatsapp-pai
 ```
 

@@ -1021,35 +1021,32 @@ const { data } = await supabase
 ### Ejemplo de PDF de Solicitud
 
 ```
-Solicitud Nro: 92006-2025
+Solicitud Nro: 10001-2025
 
 Tipo: RECLAMO
 Subtipo: LED - LUMINARIA APAGADA
-Ubicación: PJE. MAGALLANES 3979
-Distrito: SUROESTE
-Vecinal: BARRIO ROMA
+Ubicación: CALLE EJEMPLO 123
+Distrito: CENTRO
+Vecinal: BARRIO DEMO
 
-Descripción: Colgante sin funcionar a partir del viento del jueves.
-Por ahí encendía pero se apagó totalmente. Puede ser el cable,
-ya que siguen los que alimentaban a la sodio. Muy oscuro ya que
-están distantes las colgantes. Entre R S Peña y Stgo. de Chile.
+Descripción: Ejemplo ficticio. La luminaria de la esquina no enciende.
 
-Fecha: 25/10/2025 09:17
+Fecha: 01/01/2025 09:00
 Estado: Derivado
-Prioridad: CRÍTICA
+Prioridad: MEDIA
 Area origen: ATENCIÓN CIUDADANA
-Reiteraciones: 1
+Reiteraciones: 0
 
 Solicitantes:
-Apellido y Nombres: RODRIGUEZ SARA AMAND (1 reit)
-Doc: DNI 17181314
-Teléfono: Cel: -
-Email:
-Horario contacto:
+Apellido y Nombres: PEREZ JUAN DEMO
+Doc: DNI 00000000
+Teléfono: Cel: 543420000000
+Email: juan.demo@example.com
+Horario contacto: 09 a 12
 
 Derivaciones:
 Area destino: ALUMBRADO PÚBLICO
-Fecha/Hora: 25/10/2025 09:21
+Fecha/Hora: 01/01/2025 09:05
 Estado: Recibido
 ```
 
@@ -1340,7 +1337,7 @@ function requireApiKey(req, res, next) {
 
 ```bash
 # Versión local
-cd "d:\Renzo\Trabajo\Proyectos\Organizador PAI"
+cd organizador-pai
 npm install
 npm start
 
