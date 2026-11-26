@@ -14,18 +14,11 @@ Este servidor usa GREEN-API para enviar mensajes por WhatsApp sin necesidad de w
 
 ### 2. Configurar Variables de Entorno
 
-**Localmente (crear archivo .env):**
-```
-GREEN_API_ID=tu_id_instance
-GREEN_API_TOKEN=tu_api_token
-PORT=3000
-```
+**Localmente:** copiá `.env.example` a `.env` y reemplazá los placeholders. El archivo `.env` no se commitea. El servidor lo lee al arrancar y no pisa variables que ya existan en el entorno.
 
 **En Railway (o cualquier plataforma):**
 - Ve a Settings → Variables
-- Agrega:
-  - `GREEN_API_ID` = tu_id_instance
-  - `GREEN_API_TOKEN` = tu_api_token
+- Agregá `GREEN_API_ID` y `GREEN_API_TOKEN` con los valores de tu consola GREEN-API
 
 ### 3. Instalar Dependencias
 

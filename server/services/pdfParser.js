@@ -17,10 +17,7 @@ async function extraerDatosPDF(rutaPDF) {
         // Texto extraído del PDF
         const texto = data.text;
 
-        console.log('Texto extraído del PDF:');
-        console.log('='.repeat(60));
-        console.log(texto);
-        console.log('='.repeat(60));
+        console.log(`PDF leído (${texto.length} caracteres). El texto no se imprime.`);
 
         // Extraer cada campo usando expresiones regulares
         const datosPDF = {
@@ -46,8 +43,7 @@ async function extraerDatosPDF(rutaPDF) {
             }
         });
 
-        console.log('\nDatos extraídos:');
-        console.log(JSON.stringify(datosPDF, null, 2));
+        console.log(`Datos extraídos para la solicitud ${datosPDF.solicitud_nro || '(sin número)'}.`);
 
         return datosPDF;
 

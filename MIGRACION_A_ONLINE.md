@@ -420,10 +420,10 @@ serve(async (req) => {
 
     // Por ahora, devolver mock data
     const datos = {
-      solicitud_nro: '92006-2025',
+      solicitud_nro: '10001-2025',
       tipo: 'RECLAMO',
       subtipo: 'LED - LUMINARIA APAGADA',
-      ubicacion: 'PJE. MAGALLANES 3979',
+      ubicacion: 'CALLE EJEMPLO 123',
       // ... extraer con regex como en pdfParser.js actual
     }
 

@@ -1,6 +1,17 @@
 // Cargar variables de entorno
 require('dotenv').config();
 
+const SESSION_SECRETS_BLOQUEADOS = new Set([
+    'replace-with-a-long-random-string'
+]);
+
+const sessionSecret = (process.env.SESSION_SECRET || '').trim();
+if (sessionSecret.length < 16 || SESSION_SECRETS_BLOQUEADOS.has(sessionSecret.toLowerCase())) {
+    console.error('SESSION_SECRET falta o sigue siendo un placeholder.');
+    console.error('Copiá .env.example a .env y definí una cadena aleatoria de al menos 16 caracteres.');
+    process.exit(1);
+}
+
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
@@ -29,7 +40,7 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Configurar sesiones
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'cambiar-este-secreto',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -134,7 +145,7 @@ app.use((err, req, res, next) => {
 whatsappService.inicializar();
 
 // Iniciar servidor Express
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log('='.repeat(60));
     console.log(`🚀 Servidor PAI iniciado correctamente`);
     console.log(`📍 URL: http://localhost:${PORT}`);
@@ -142,12 +153,7 @@ const server = app.listen(PORT, () => {
     console.log(`🔧 Modo: ${process.env.NODE_ENV || 'development'}`);
     console.log('='.repeat(60));
     console.log('');
-    console.log('Usuarios de prueba creados:');
-    console.log('  👤 Admin:      username: admin       password: admin123');
-    console.log('  👤 Operador:   username: operador1   password: operador123');
-    console.log('  👤 Supervisor: username: supervisor1 password: supervisor123');
-    console.log('');
-    console.log('⚠️  IMPORTANTE: Cambiar contraseñas en producción');
+    console.log('Las cuentas se crean desde .env la primera vez. Las contraseñas no se imprimen.');
     console.log('');
     console.log('📱 Esperando conexión de WhatsApp...');
     console.log('   Si es la primera vez, escanea el código QR que aparecerá abajo');

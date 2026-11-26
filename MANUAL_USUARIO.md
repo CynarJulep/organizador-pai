@@ -49,7 +49,7 @@ OPERADOR carga PDF → Sistema extrae datos → SUPERVISOR revisa → Aprueba �
 1. Abre **CMD** o **PowerShell**
 2. Navega a la carpeta del proyecto:
    ```cmd
-   cd "d:\Renzo\Trabajo\Proyectos\Organizador PAI"
+   cd organizador-pai
    ```
 3. Instala las dependencias:
    ```cmd
@@ -59,11 +59,8 @@ OPERADOR carga PDF → Sistema extrae datos → SUPERVISOR revisa → Aprueba �
 
 ### Paso 3: Configurar Variables de Entorno
 
-1. Abre el archivo `.env` con Notepad
-2. Cambia `SESSION_SECRET` por una cadena aleatoria:
-   ```
-   SESSION_SECRET=MiClaveSecreta123ABC
-   ```
+1. Copiá `.env.example` a `.env`
+2. Definí `SESSION_SECRET` con una cadena aleatoria de al menos 16 caracteres, y definí `ADMIN_PASSWORD`, `OPERATOR_PASSWORD` y `SUPERVISOR_PASSWORD`. No uses los placeholders del ejemplo y no subas `.env` al repositorio.
 
 ### Paso 4: Iniciar el Servidor
 
@@ -104,13 +101,9 @@ La primera vez que inicies el servidor, aparecerá un código QR en la consola:
 2. Ve a: http://localhost:3000
 3. Verás la pantalla de login
 
-### Usuarios por Defecto
+### Usuarios
 
-- **Operador**: `operador1` / `operador123`
-- **Supervisor**: `supervisor1` / `supervisor123`
-- **Admin**: `admin` / `admin123`
-
-⚠️ **IMPORTANTE**: Cambiar estas contraseñas después del primer uso
+La primera vez, el servidor crea las cuentas con los usuarios y contraseñas definidos en `.env` (`ADMIN_USERNAME`, `OPERATOR_USERNAME`, `SUPERVISOR_USERNAME` y sus contraseñas). Esos valores no están en el repositorio.
 
 ---
 

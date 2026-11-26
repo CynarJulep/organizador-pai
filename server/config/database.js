@@ -1,9 +1,20 @@
 const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 const path = require('path');
 
+// El placeholder de .env.example no crea cuentas. Hay que elegir una contraseña propia.
+const PASSWORDS_BLOQUEADAS = new Set([
+    '',
+    'replace-with-your-own-password'
+]);
+
+const DB_DIR = path.join(__dirname, '../../database');
+fs.mkdirSync(DB_DIR, { recursive: true });
+fs.mkdirSync(path.join(__dirname, '../../uploads'), { recursive: true });
+
 // Ruta de la base de datos
-const DB_PATH = path.join(__dirname, '../../database/pai.db');
+const DB_PATH = path.join(DB_DIR, 'pai.db');
 
 // Crear conexión a la base de datos
 const db = new Database(DB_PATH, { verbose: console.log });
@@ -92,50 +103,38 @@ function inicializarDB() {
 }
 
 /**
- * Crea un usuario administrador por defecto
+ * Crea un usuario solo si la contraseña viene del entorno y no es un valor público.
+ * No imprime la contraseña.
+ */
+function crearUsuarioDesdeEntorno(usernameKey, passwordKey, usernamePorDefecto, rol, nombreCompleto) {
+    const username = (process.env[usernameKey] || usernamePorDefecto).trim();
+    const password = (process.env[passwordKey] || '').trim();
+
+    if (!username || PASSWORDS_BLOQUEADAS.has(password)) {
+        console.log(`⚠️  Usuario ${rol} no creado. Definí ${passwordKey} en .env (ver .env.example).`);
+        return;
+    }
+
+    const existente = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(username);
+    if (existente) {
+        return;
+    }
+
+    const passwordHash = bcrypt.hashSync(password, 10);
+    db.prepare(`
+        INSERT INTO usuarios (username, password, rol, nombre_completo)
+        VALUES (?, ?, ?, ?)
+    `).run(username, passwordHash, rol, nombreCompleto);
+    console.log(`✓ Usuario ${rol} creado (${username}). Contraseña leída de ${passwordKey}.`);
+}
+
+/**
+ * Crea los usuarios iniciales a partir de variables de entorno
  */
 function crearUsuarioAdminPorDefecto() {
-    const checkAdmin = db.prepare('SELECT id FROM usuarios WHERE username = ?').get('admin');
-
-    if (!checkAdmin) {
-        const passwordHash = bcrypt.hashSync('admin123', 10);
-        const stmt = db.prepare(`
-            INSERT INTO usuarios (username, password, rol, nombre_completo)
-            VALUES (?, ?, ?, ?)
-        `);
-
-        stmt.run('admin', passwordHash, 'admin', 'Administrador');
-        console.log('✓ Usuario administrador creado (username: admin, password: admin123)');
-        console.log('⚠️  IMPORTANTE: Cambiar la contraseña después del primer inicio de sesión');
-    }
-
-    // Crear usuario operador de ejemplo
-    const checkOperador = db.prepare('SELECT id FROM usuarios WHERE username = ?').get('operador1');
-
-    if (!checkOperador) {
-        const passwordHash = bcrypt.hashSync('operador123', 10);
-        const stmt = db.prepare(`
-            INSERT INTO usuarios (username, password, rol, nombre_completo)
-            VALUES (?, ?, ?, ?)
-        `);
-
-        stmt.run('operador1', passwordHash, 'operador', 'Operador Ejemplo');
-        console.log('✓ Usuario operador creado (username: operador1, password: operador123)');
-    }
-
-    // Crear usuario supervisor de ejemplo
-    const checkSupervisor = db.prepare('SELECT id FROM usuarios WHERE username = ?').get('supervisor1');
-
-    if (!checkSupervisor) {
-        const passwordHash = bcrypt.hashSync('supervisor123', 10);
-        const stmt = db.prepare(`
-            INSERT INTO usuarios (username, password, rol, nombre_completo)
-            VALUES (?, ?, ?, ?)
-        `);
-
-        stmt.run('supervisor1', passwordHash, 'supervisor', 'Supervisor Ejemplo');
-        console.log('✓ Usuario supervisor creado (username: supervisor1, password: supervisor123)');
-    }
+    crearUsuarioDesdeEntorno('ADMIN_USERNAME', 'ADMIN_PASSWORD', 'admin', 'admin', 'Administrador');
+    crearUsuarioDesdeEntorno('OPERATOR_USERNAME', 'OPERATOR_PASSWORD', 'operador1', 'operador', 'Operador Ejemplo');
+    crearUsuarioDesdeEntorno('SUPERVISOR_USERNAME', 'SUPERVISOR_PASSWORD', 'supervisor1', 'supervisor', 'Supervisor Ejemplo');
 }
 
 /**
